@@ -1,0 +1,15 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "all"
+    Access-Control-Allow-Origin = "*"
+
+# Disable Netlify's bot protection for crawlers
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = false

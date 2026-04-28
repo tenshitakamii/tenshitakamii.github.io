@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takami Tenshi | KTV Âm Thanh, Mạng & Hệ Thống</title>
+    <meta name="description" content="Takami Tenshi - Kỹ Thuật Viên Âm Thanh, Mạng và Hệ Thống Máy Tính tại THPT Nguyễn Huệ, Huế">
+    <meta name="theme-color" content="#1A1030">
+
+    <!-- Open Graph (Facebook, Discord) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Takami Tenshi | Portfolio">
+    <meta property="og:description" content="Kỹ Thuật Viên Âm Thanh, Mạng và Hệ Thống Máy Tính • Cybersecurity Enthusiast">
+    <meta property="og:url" content="https://tenshitakami.netlify.app">
+    <meta property="og:image" content="https://raw.githubusercontent.com/gaming1507/cyrene-cdn/main/og-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Takami Tenshi">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Takami Tenshi | Portfolio">
+    <meta name="twitter:description" content="Kỹ Thuật Viên Âm Thanh, Mạng và Hệ Thống Máy Tính • Cybersecurity Enthusiast">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/gaming1507/cyrene-cdn/main/og-preview.png">
+
+    <link rel="icon" href="./assets/weblogo.webp" type="image/webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <!-- Top Left Controls: UI Toggle -->
+    <div class="top-left-controls">
+        <button id="ui-toggle" class="control-btn" data-vi-title="Ẩn/Hiện Giao diện" data-en-title="Toggle UI Visibility" title="Ẩn/Hiện Giao diện">
+            <i class="fas fa-eye"></i>
+        </button>
+    </div>
+
+    <!-- Top Right Controls: Theme & Language -->
+    <div class="top-right-controls">
+        <button id="theme-toggle" class="control-btn" data-vi-title="Chuyển đổi Giao diện" data-en-title="Toggle Theme" title="Chuyển đổi Giao diện">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button id="lang-toggle" class="control-btn" data-vi-title="Chuyển đổi Ngôn ngữ" data-en-title="Toggle Language" title="Chuyển đổi Ngôn ngữ">
+            <span class="lang-text">VI</span>
+        </button>
+    </div>
+
+    <!-- Background Videos (both preloaded, toggled by CSS) -->
+    <video id="bg-video-dark" autoplay loop muted playsinline class="bg-video bg-video-dark">
+        <source src="https://raw.githubusercontent.com/gaming1507/cyrene-cdn/main/background.mp4" type="video/mp4">
+    </video>
+    <video id="bg-video-light" loop muted playsinline class="bg-video bg-video-light">
+        <source src="https://raw.githubusercontent.com/gaming1507/cyrene-cdn/main/background_light.mp4" type="video/mp4">
+    </video>
+    <div class="bg-video-overlay"></div>
+
+    <!-- Main Layout Container -->
+    <div class="app-container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Left Sidebar: Fixed Profile Panel -->
+        <aside class="sidebar-wrapper">
+            <div class="profile-card glass-card fade-up">
+                <div class="avatar-container">
+                    <div class="avatar-glow"></div>
+                    <!-- Using existing avatar from assets -->
+                    <img src="./assets/cyrene-avatar.gif" alt="Takami Tenshi Avatar" class="avatar"
+                        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Takami+Tenshi&background=1A1030&color=4DDDB8&size=256';">
+                    <div class="status-badge" data-vi="<span class='status-dot'></span> Sẵn sàng" data-en="<span class='status-dot'></span> Available">
+                        <span class="status-dot"></span> Sẵn sàng
+                    </div>
+                </div>
+
+                <h1 class="name">Takami Tenshi</h1>
+                <h2 class="role" data-vi="KTV Âm Thanh, Mạng & Hệ Thống Máy Tính" data-en="Audio, Network & Computer Systems Technician">KTV Âm Thanh, Mạng & Hệ Thống Máy Tính</h2>
+                <p class="bio" data-vi="Nam | Việt Nam 🇻🇳<br><br>Mình là Takami Tenshi, học sinh lớp 10 tại THPT Nguyễn Huệ (Huế). Thích vọc mạng, quản trị server, edit video và mày mò phần cứng." data-en="Male | Vietnam 🇻🇳<br><br>I'm Takami Tenshi, a 10th grader at Nguyen Hue High School (Hue). Into networking, server management, video editing and tinkering with hardware.">
+                    Nam | Việt Nam 🇻🇳<br><br>
+                    Mình là Takami Tenshi, học sinh lớp 10 tại THPT Nguyễn Huệ (Huế). Thích vọc mạng, quản trị server, edit video và mày mò phần cứng.
+                </p>
+
+                <!-- Discord Lanyard Presence -->
+                <div class="discord-widget fade-up delay-1">
+                    <div class="discord-avatar-container">
+                        <img src="https://ui-avatars.com/api/?name=Loading&background=1A1030&color=4DDDB8"
+                            id="lanyard-avatar" class="discord-avatar" alt="Discord Avatar">
+                        <img id="lanyard-decoration" class="discord-decoration" src="" alt="Decoration">
+                        <div id="lanyard-status" class="discord-status-dot offline"></div>
+                        <!-- Custom Status Bubble -->
+                        <div id="lanyard-status-bubble" class="discord-status-bubble"></div>
+                    </div>
+                    <div class="discord-info">
+                        <div class="discord-name-row">
+                            <span id="lanyard-username" class="discord-username" data-vi="Đang kết nối..." data-en="Connecting...">Đang kết nối...</span>
+                            <span id="lanyard-discriminator" class="discord-discriminator"></span>
+                            <div id="lanyard-badges" class="discord-badges-list"></div>
+                        </div>
+                        <div class="discord-activity">
+                            <div id="lanyard-activity" class="discord-act-main" data-vi="Vui lòng đợi" data-en="Please wait">Vui lòng đợi</div>
+                            <div id="lanyard-details" class="discord-act-detail">...</div>
+                        </div>
+                    </div>
+                    <img id="lanyard-act-icon" class="discord-act-icon" src="" alt="Activity Icon">
+                </div>
+
+                <nav class="nav-menu">
+                    <a href="#about" class="nav-link active" data-vi="<i class='fas fa-user-astronaut'></i> Về Tôi" data-en="<i class='fas fa-user-astronaut'></i> About Me"><i class="fas fa-user-astronaut"></i> Về Tôi</a>
+                    <a href="#services" class="nav-link" data-vi="<i class='fas fa-briefcase'></i> Chuyên Môn" data-en="<i class='fas fa-briefcase'></i> Expertise"><i class="fas fa-briefcase"></i> Chuyên Môn</a>
+                    <a href="#skills" class="nav-link" data-vi="<i class='fas fa-layer-group'></i> Kỹ Năng / Công Nghệ" data-en="<i class='fas fa-layer-group'></i> Skills / Tech"><i class="fas fa-layer-group"></i> Kỹ Năng / Công Nghệ</a>
+                    <a href="#experience" class="nav-link" data-vi="<i class='fas fa-project-diagram'></i> Dự Án Tham Gia" data-en="<i class='fas fa-project-diagram'></i> Projects"><i class="fas fa-project-diagram"></i> Dự Án Tham Gia</a>
+                </nav>
+
+                <div class="social-links">
+                    <a href="https://www.facebook.com/tenshitakamii" target="_blank" class="social-btn"><i
+                            class="fab fa-facebook"></i></a>
+                    <a href="https://discord.com/users/695181337241583687" target="_blank" class="social-btn"><i
+                            class="fab fa-discord"></i></a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Side: Scrollable Content Areas -->
+        <main class="content-wrapper">
+
+            <!-- About Section -->
+            <section id="about" class="section fade-up delay-1">
+                <div class="section-header">
+                    <span class="section-badge">01 // INIT</span>
+                    <h2 class="section-title" data-vi="Về Bản Thân" data-en="About Me">Về Bản Thân</h2>
+                </div>
+
+                <div class="glass-card panel-content">
+                    <p class="lead-text" data-vi="Mình là <strong>Takami Tenshi</strong>, học sinh lớp 10 tại THPT Nguyễn Huệ (Huế)." data-en="I'm <strong>Takami Tenshi</strong>, a 10th grader at Nguyen Hue High School (Hue).">
+                        Mình là <strong>Takami Tenshi</strong>, học sinh lớp 10 tại THPT Nguyễn Huệ (Huế).
+                    </p>
+                    <p class="sub-text" data-vi="An ninh mạng, sửa máy tính, cài Windows, khắc phục lỗi phần mềm/phần cứng. Quản trị mạng, vọc server Linux. Edit video bằng CapCut, FFmpeg, làm sub bằng Aegisub.<br><br>Nói chung là thích vọc công nghệ, cái gì liên quan đến kỹ thuật là mình thử hết." data-en="Cybersecurity, PC repair, Windows installation, software/hardware troubleshooting. Network administration, tinkering with Linux servers. Video editing with CapCut, FFmpeg, subtitles with Aegisub.<br><br>Basically, I love tinkering with tech — anything technical, I'll give it a try.">
+                        An ninh mạng, sửa máy tính, cài Windows, khắc phục lỗi phần mềm/phần cứng. Quản trị mạng, vọc server Linux. Edit video bằng CapCut, FFmpeg, làm sub bằng Aegisub.
+                        <br><br>
+                        Nói chung là thích vọc công nghệ, cái gì liên quan đến kỹ thuật là mình thử hết.
+                    </p>
+                </div>
+
+                <div class="glass-card code-panel mt-2 fade-up">
+                    <div class="code-header">
+                        <div class="window-controls">
+                            <span class="ctrl close"></span>
+                            <span class="ctrl min"></span>
+                            <span class="ctrl max"></span>
+                        </div>
+                        <span class="filename">info.yml</span>
+                    </div>
+                    <pre><code><span class="token key">entity:</span> Takami Tenshi
+<span class="token key">location:</span> <span data-vi="Huế, Việt Nam" data-en="Hue, Vietnam">Huế, Việt Nam</span>
+<span class="token key">school:</span> <span data-vi="THPT Nguyễn Huệ" data-en="Nguyen Hue High School">THPT Nguyễn Huệ</span>
+<span class="token key">role:</span> Audio, Network & Systems Tech
+<span class="token key">core_focus:</span>
+  <span class="token value">- Cybersecurity</span>
+  <span class="token value">- PC Technician</span>
+  <span class="token value">- Video Editing</span>
+  <span class="token value">- Networking & Hardware</span>
+<span class="token key">status:</span> <span class="token highlight">Wind Walker Online_</span></code></pre>
+                </div>
+            </section>
+
+            <!-- Services / Expertise Section -->
+            <section id="services" class="section">
+                <div class="section-header fade-up">
+                    <span class="section-badge">02 // EXPERTISE</span>
+                    <h2 class="section-title" data-vi="Chuyên Môn" data-en="Expertise">Chuyên Môn</h2>
+                </div>
+
+                <div class="services-grid">
+                    <div class="service-card glass-card fade-up">
+                        <div class="service-icon"><i class="fas fa-shield-halved"></i></div>
+                        <h3 data-vi="An ninh Mạng" data-en="Cybersecurity">An ninh Mạng</h3>
+                        <p data-vi="Pentest, phân tích lỗ hổng, bảo mật hệ thống, giám sát và phòng chống xâm nhập mạng." data-en="Pentesting, vulnerability analysis, system security, network monitoring and intrusion prevention.">Pentest, phân tích lỗ hổng, bảo mật hệ thống, giám sát và phòng chống xâm nhập mạng.</p>
+                    </div>
+
+                    <div class="service-card glass-card fade-up delay-1">
+                        <div class="service-icon"><i class="fas fa-laptop-medical"></i></div>
+                        <h3 data-vi="Kỹ thuật Máy tính" data-en="PC Technician">Kỹ thuật Máy tính</h3>
+                        <p data-vi="Sửa lỗi phần mềm/phần cứng, cài đặt Windows, khắc phục sự cố hệ thống, tối ưu hiệu suất máy tính." data-en="Software/hardware troubleshooting, Windows installation, system recovery, PC performance optimization.">Sửa lỗi phần mềm/phần cứng, cài đặt Windows, khắc phục sự cố hệ thống, tối ưu hiệu suất máy tính.</p>
+                    </div>
+
+                    <div class="service-card glass-card fade-up delay-2">
+                        <div class="service-icon"><i class="fas fa-film"></i></div>
+                        <h3 data-vi="Chỉnh sửa Video" data-en="Video Editing">Chỉnh sửa Video</h3>
+                        <p data-vi="CapCut, FFmpeg, Aegisub — edit video, xử lý hàng loạt và làm phụ đề." data-en="CapCut, FFmpeg, Aegisub — video editing, batch processing and subtitling.">CapCut, FFmpeg, Aegisub — edit video, xử lý hàng loạt và làm phụ đề.</p>
+                    </div>
+
+                    <div class="service-card glass-card fade-up delay-3">
+                        <div class="service-icon"><i class="fas fa-screwdriver-wrench"></i></div>
+                        <h3 data-vi="Phần cứng & Quản trị mạng" data-en="Hardware & Networking">Phần cứng & Quản trị mạng</h3>
+                        <p data-vi="Vọc vạch linh kiện, đấu nối mạng, cấu hình router/switch, dựng server Linux (Zorin OS)." data-en="Tinkering with components, network cabling, router/switch config, running Linux servers (Zorin OS).">Vọc vạch linh kiện, đấu nối mạng, cấu hình router/switch, dựng server Linux (Zorin OS).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="section">
+                <div class="section-header fade-up">
+                    <span class="section-badge">03 // CAPABILITIES</span>
+                    <h2 class="section-title" data-vi="Kỹ Năng / Công Nghệ" data-en="Skills / Technologies">Kỹ Năng / Công Nghệ</h2>
+                </div>
+
+                <div class="skills-grid">
+                    <!-- Tech Stack Grid -->
+                    <div class="glass-card skill-box fade-up">
+                        <h3 class="skill-box-title" data-vi="<i class='fas fa-toolbox'></i> Bộ Công Cụ" data-en="<i class='fas fa-toolbox'></i> Tech Stack"><i class="fas fa-toolbox"></i> Bộ Công Cụ</h3>
+                        <div class="tech-icons">
+                            <div class="tech-item"><i class="fas fa-shield-halved"></i><span>Security</span></div>
+                            <div class="tech-item"><i class="fab fa-windows"></i><span>Windows</span></div>
+                            <div class="tech-item"><i class="fab fa-linux"></i><span>Linux</span></div>
+                            <div class="tech-item"><i class="fas fa-network-wired"></i><span>Network</span></div>
+                            <div class="tech-item"><i class="fas fa-video"></i><span>CapCut</span></div>
+                            <div class="tech-item"><i class="fas fa-terminal"></i><span>FFmpeg</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bars -->
+                    <div class="glass-card skill-box fade-up delay-1">
+                        <h3 class="skill-box-title" data-vi="<i class='fas fa-chart-bar'></i> Độ Thông Thạo" data-en="<i class='fas fa-chart-bar'></i> Masteries"><i class="fas fa-chart-bar"></i> Độ Thông Thạo</h3>
+
+                        <div class="skill-bar-item">
+                            <div class="skill-label">
+                                <span data-vi="An ninh Mạng" data-en="Cybersecurity">An ninh Mạng</span>
+                                <span class="pct">95%</span>
+                            </div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-progress="95"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar-item">
+                            <div class="skill-label">
+                                <span data-vi="Kỹ thuật Máy tính" data-en="PC Technician">Kỹ thuật Máy tính</span>
+                                <span class="pct">90%</span>
+                            </div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-progress="90"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar-item">
+                            <div class="skill-label">
+                                <span data-vi="Phần cứng & Quản trị mạng" data-en="Hardware & Networking">Phần cứng & Quản trị mạng</span>
+                                <span class="pct">85%</span>
+                            </div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-progress="85"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-bar-item">
+                            <div class="skill-label">
+                                <span data-vi="Chỉnh sửa Video" data-en="Video Editing">Chỉnh sửa Video</span>
+                                <span class="pct">75%</span>
+                            </div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-progress="75"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience / Projects Section -->
+            <section id="experience" class="section">
+                <div class="section-header fade-up">
+                    <span class="section-badge">04 // PROJECTS</span>
+                    <h2 class="section-title" data-vi="Dự Án Tham Gia" data-en="Projects">Dự Án Tham Gia</h2>
+                </div>
+
+                <div class="project-list">
+                    <!-- Project Item: Hue-ICT Challenge 2026 -->
+                    <div class="project-item glass-card hover-glow fade-up">
+                        <div class="project-main-flex">
+                            <div class="project-icon-placeholder">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="project-content">
+                                <div class="project-title-row">
+                                    <h3 class="project-title">Hue-ICT Challenge 2026</h3>
+                                    <span class="role-badge" data-vi="Chung kết" data-en="Finalist">Chung kết</span>
+                                </div>
+                                <p class="project-desc" data-vi="Cuộc thi Công nghệ Thông tin tại Huế — Lọt vào Chung kết NAÏ CHALLENGE. Thi đấu và thể hiện năng lực STEM & Công nghệ." data-en="ICT Competition in Hue — Reached the Finals of NAÏ CHALLENGE. Competing and showcasing STEM & Technology capabilities.">Cuộc thi Công nghệ Thông tin tại Huế — Lọt vào Chung kết NAÏ CHALLENGE. Thi đấu và thể hiện năng lực STEM & Công nghệ.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Item: QR Journey -->
+                    <div class="project-item glass-card hover-glow fade-up delay-1">
+                        <div class="project-main-flex">
+                            <div class="project-icon-placeholder">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <div class="project-content">
+                                <div class="project-title-row">
+                                    <h3 class="project-title">QR Journey</h3>
+                                    <span class="role-badge" data-vi="Quản lý" data-en="Manager">Quản lý</span>
+                                </div>
+                                <p class="project-desc" data-vi="Dự án quản lý hành trình bằng mã QR — Đảm nhận vai trò Quản lý dự án & Thiết kế poster QR chuyên nghiệp." data-en="QR-based journey management project — Serving as Project Manager & Professional QR poster designer.">Dự án quản lý hành trình bằng mã QR — Đảm nhận vai trò Quản lý dự án & Thiết kế poster QR chuyên nghiệp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <footer class="main-footer fade-up delay-2">
+                <div class="footer-content glass-card">
+                    <div class="footer-brand">Takami Tenshi // 2026</div>
+                    <div class="footer-msg" data-vi="STEM & Robotics — Powered by Wind ✦" data-en="STEM & Robotics — Powered by Wind ✦">STEM & Robotics — Powered by Wind ✦</div>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Background Music Audio Tag -->
+    <audio id="bg-music" loop autoplay>
+        <source src="https://raw.githubusercontent.com/gaming1507/cyrene-cdn/main/with-you-once-more.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Music Toggle Button -->
+    <button id="music-toggle-btn" class="floating-music-btn" data-vi-title="Mở/Đóng Bảng Nhạc" data-en-title="Toggle Music Panel" title="Mở/Đóng Bảng Nhạc">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- Music Panel (Now decoupled from the button) -->
+    <div class="music-content" id="music-content">
+        <div class="music-cover">
+            <i class="fas fa-compact-disc fa-spin"></i>
+        </div>
+        <div class="music-info">
+            <div class="music-title">With You Once More</div>
+            <div class="music-controls">
+                <button id="music-play-pause" class="ctrl-btn"><i class="fas fa-play"></i></button>
+                <div class="volume-slider-container">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" id="music-volume" min="0" max="1" step="0.01" value="0.3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating View Counter -->
+    <div class="floating-view-badge" data-vi-title="Lượt xem hồ sơ" data-en-title="Profile Views" title="Lượt xem hồ sơ">
+        <i class="fas fa-eye"></i>
+        <span id="view-count">...</span>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast" data-vi="Đã sao chép!" data-en="Copied!">Đã sao chép!</div>
+
+    <script src="./script.js"></script>
+
+    <!-- Anti Inspect -->
+    <script>
+        // Vô hiệu hóa chuột phải
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+
+        document.onkeydown = function (e) {
+            // Chặn phím F12 (phím tắt huyền thoại để mở DevTools)
+            if (e.keyCode == 123) {
+                return false;
+            }
+
+            // Chặn Ctrl+Shift+I: Một cách khác để mở bảng Inspect
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                return false;
+            }
+
+            // Chặn Ctrl+Shift+J: Mở thẳng tab Console
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+                return false;
+            }
+
+            // Chặn Ctrl+Shift+C: Chế độ chọn phần tử để soi (Inspect Element)
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 67) {
+                return false;
+            }
+
+            // Chặn Ctrl+U: Xem mã nguồn thô của trang (View Source)
+            if (e.ctrlKey && e.keyCode == 85) {
+                return false;
+            }
+        };
+    </script>
+
+    <!-- ==================== KHỞI TẠO VIEW COUNTER ==================== -->
+    <script>
+        // Gọi hàm counter ngay sau khi trang tải xong (đảm bảo element #view-count đã tồn tại)
+        document.addEventListener('DOMContentLoaded', function () {
+            initViewCounter();
+        });
+    </script>
+</body>
+
+</html>
