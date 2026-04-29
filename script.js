@@ -580,8 +580,46 @@ function setMinecraftOffline(statusEl, statusTextEl, playersEl, versionEl) {
     versionEl.innerText = '--';
 }
 
+// =========================================================================
+// CUSTOM CURSOR
+// =========================================================================
+function initCustomCursor() {
+    const cursor = document.getElementById('custom-cursor');
+    const cursorGlow = document.getElementById('custom-cursor-glow');
+    
+    if (!cursor || !cursorGlow) return;
+
+    // Only enable if pointer is fine (not a touch device)
+    if (window.matchMedia("(pointer: fine)").matches) {
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Adding a slight delay for the glow for a trailing effect
+            setTimeout(() => {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        // Add hover effect to clickable elements
+        const clickables = document.querySelectorAll('a, button, input, select, textarea, .clickable, .discord-avatar-container');
+        clickables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hovering');
+                cursorGlow.classList.add('hovering');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hovering');
+                cursorGlow.classList.remove('hovering');
+            });
+        });
+    }
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
+    initCustomCursor();
     connectLanyard();
     initViewCounter();
     initMusicPlayer();

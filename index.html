@@ -40,6 +40,10 @@
         <div id="boot-text" class="boot-text"></div>
     </div>
 
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+    <div id="custom-cursor-glow" class="custom-cursor-glow"></div>
+
     <!-- Top Left Controls: UI Toggle -->
     <div class="top-left-controls">
         <button id="ui-toggle" class="control-btn" data-vi-title="Ẩn/Hiện Giao diện" data-en-title="Toggle UI Visibility" title="Ẩn/Hiện Giao diện">
@@ -376,7 +380,7 @@
     </div>
 
     <!-- Background Music Audio Tag -->
-    <audio id="bg-music" loop autoplay>
+    <audio id="bg-music" crossorigin="anonymous" loop autoplay>
         <source src="https://github.com/gaming1507/cyrene-cdn/releases/download/v1.0/with-you-once-more.mp3" type="audio/mpeg">
     </audio>
 
@@ -385,8 +389,9 @@
         <i class="fas fa-music"></i>
     </button>
 
-    <!-- Music Panel (Now decoupled from the button) -->
+    <!-- Music Panel -->
     <div class="music-content" id="music-content">
+        <canvas id="audio-visualizer" class="audio-visualizer"></canvas>
         <div class="music-cover">
             <i class="fas fa-compact-disc fa-spin"></i>
         </div>
