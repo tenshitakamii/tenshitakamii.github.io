@@ -1,3 +1,60 @@
+// =========================================================================
+// SYSTEM BOOT SEQUENCE
+// =========================================================================
+(async function initBootSequence() {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    
+    if (!bootScreen || !bootText) return;
+
+    // Check if already booted in this session
+    if (sessionStorage.getItem('hasBooted') === 'true') {
+        bootScreen.classList.add('hidden');
+        return;
+    }
+
+    // Start boot sequence
+    document.body.classList.add('is-booting');
+    
+    const lines = [
+        "Initializing kernel...",
+        "[ OK ] Started Device Manager.",
+        "[ OK ] Mounted Virtual File System.",
+        "[ OK ] Reached target Basic System.",
+        "Starting Network Configuration...",
+        "[ OK ] Started Network Configuration.",
+        "Mounting Core Assets...",
+        "[ OK ] Loaded CSS and JS Modules.",
+        "Connecting to secure server... TCP/IP Handshake established.",
+        "Fetching Profile Data (Takami Tenshi)...",
+        "[ OK ] Profile Data loaded successfully.",
+        "Verifying security protocols...",
+        "[ OK ] Access Granted.",
+        "Starting User Interface..."
+    ];
+
+    let currentLine = 0;
+
+    function printLine() {
+        if (currentLine < lines.length) {
+            bootText.innerHTML += lines[currentLine] + "<br>";
+            currentLine++;
+            // Random delay between 50ms and 150ms for realistic typing effect
+            setTimeout(printLine, Math.random() * 100 + 50);
+        } else {
+            // Sequence finished, wait 500ms then fade out
+            setTimeout(() => {
+                bootScreen.classList.add('hidden');
+                document.body.classList.remove('is-booting');
+                sessionStorage.setItem('hasBooted', 'true');
+            }, 500);
+        }
+    }
+
+    // Start printing after a tiny initial delay
+    setTimeout(printLine, 200);
+})();
+
 // Scroll Animations Observer
 let currentLanyardData = null;
 let isBubbleManuallyHidden = false;
