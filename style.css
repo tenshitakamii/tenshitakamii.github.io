@@ -894,6 +894,84 @@ body.ui-hidden .content-wrapper {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .stat-card.full-width {
+        grid-column: 1 / -1;
+    }
+}
+
+.discord-live-activity {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-family: var(--font-sans);
+    padding-top: 0.5rem;
+}
+
+.activity-placeholder {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.activity-icon-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+}
+
+.activity-large-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.activity-small-image {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-panel);
+    background: #111;
+}
+
+.activity-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.activity-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activity-state, .activity-details-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    font-family: var(--font-mono);
+    margin-top: 2px;
 }
 
 .stat-card {

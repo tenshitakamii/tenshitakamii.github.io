@@ -179,6 +179,23 @@ if (savedTheme === 'light') {
     body.classList.add('light-theme');
     themeIcon.className = 'fas fa-sun';
     toggleBgVideo(true);
+} else if (savedTheme === 'dark') {
+    body.classList.remove('light-theme');
+    themeIcon.className = 'fas fa-moon';
+    toggleBgVideo(false);
+} else {
+    // Idea 5: Auto-theme based on time (6 AM to 6 PM is Light Theme)
+    const hour = new Date().getHours();
+    const isDayTime = hour >= 6 && hour < 18;
+    if (isDayTime) {
+        body.classList.add('light-theme');
+        themeIcon.className = 'fas fa-sun';
+        toggleBgVideo(true);
+    } else {
+        body.classList.remove('light-theme');
+        themeIcon.className = 'fas fa-moon';
+        toggleBgVideo(false);
+    }
 }
 
 themeToggle.addEventListener('click', () => {
@@ -366,6 +383,71 @@ function updateDiscordUI(data) {
         activityEl.innerText = data.discord_status === 'offline' ? t.offline : t.idle;
         detailsEl.innerText = data.discord_status === 'offline' ? "" : t.zzz;
         icon.style.display = 'none';
+    }
+
+    // =========================================================
+    // UPDATE FULL WIDTH LIVE ACTIVITY CARD (IDEA 1)
+    // =========================================================
+    const liveActivityEl = document.getElementById('discord-live-activity');
+    if (liveActivityEl) {
+        if (data.discord_status === 'offline') {
+            liveActivityEl.innerHTML = `<div class="activity-placeholder"><i class="fas fa-bed"></i><span data-vi="Đang offline." data-en="Currently offline.">${currentLang === 'vi' ? 'Đang offline.' : 'Currently offline.'}</span></div>`;
+        } else {
+            const spotifyAct = acts.find(a => a.type === 2 && a.name === "Spotify");
+            const playAct = acts.find(a => a.type === 0);
+            
+            let cardHTML = '';
+            
+            if (spotifyAct) {
+                const albumArt = spotifyAct.assets && spotifyAct.assets.large_image 
+                    ? spotifyAct.assets.large_image.replace('spotify:', 'https://i.scdn.co/image/') 
+                    : '';
+                cardHTML = `
+                    <div class="activity-icon-container">
+                        ${albumArt ? `<img src="${albumArt}" class="activity-large-image" alt="Album Art">` : '<i class="fab fa-spotify" style="font-size:2rem; margin:15px; color:#1DB954;"></i>'}
+                        <div class="activity-small-image" style="background:#1DB954; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;"><i class="fab fa-spotify"></i></div>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-name" style="color: #1DB954;">Listening to Spotify</div>
+                        <div class="activity-state">${spotifyAct.details || ''}</div>
+                        <div class="activity-details-text">by ${spotifyAct.state || ''}</div>
+                    </div>
+                `;
+            } else if (playAct) {
+                let imgId = playAct.assets && playAct.assets.large_image ? playAct.assets.large_image : null;
+                let iconSrc = '';
+                if (imgId) {
+                    iconSrc = imgId.startsWith("mp:external")
+                        ? imgId.replace(/mp:external\/.*\/https\//, "https://")
+                        : `https://cdn.discordapp.com/app-assets/${playAct.application_id}/${imgId}.png`;
+                }
+                
+                let timeString = '';
+                if (playAct.timestamps && playAct.timestamps.start) {
+                    const elapsed = Math.floor((Date.now() - playAct.timestamps.start) / 60000);
+                    timeString = elapsed > 0 ? `Elapsed: ${elapsed}m` : 'Just started';
+                }
+
+                cardHTML = `
+                    <div class="activity-icon-container">
+                        ${iconSrc ? `<img src="${iconSrc}" class="activity-large-image" alt="Game Icon">` : '<i class="fas fa-gamepad" style="font-size:2rem; margin:15px; color:var(--primary-color);"></i>'}
+                        <div class="activity-small-image" style="background:var(--primary-color); display:flex; align-items:center; justify-content:center; color:#111; font-size:12px;"><i class="fas fa-gamepad"></i></div>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-name">${playAct.name}</div>
+                        ${playAct.details ? `<div class="activity-state">${playAct.details}</div>` : ''}
+                        ${playAct.state ? `<div class="activity-details-text">${playAct.state}</div>` : ''}
+                        ${timeString ? `<div class="activity-time">${timeString}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            if (cardHTML !== '') {
+                liveActivityEl.innerHTML = cardHTML;
+            } else {
+                liveActivityEl.innerHTML = `<div class="activity-placeholder"><i class="fas fa-coffee"></i><span data-vi="Đang online nhưng không chơi game hay nghe nhạc." data-en="Online, not playing anything.">${currentLang === 'vi' ? 'Đang online nhưng không chơi game hay nghe nhạc.' : 'Online, not playing anything.'}</span></div>`;
+            }
+        }
     }
 }
 
