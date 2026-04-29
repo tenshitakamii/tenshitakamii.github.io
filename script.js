@@ -475,11 +475,63 @@ function initMusicPlayer() {
     }
 }
 
+// =========================================================================
+// MINECRAFT LIVE STATS
+// =========================================================================
+async function fetchMinecraftStats() {
+    const statusEl = document.getElementById('mc-status');
+    const statusTextEl = statusEl ? statusEl.querySelector('.status-text') : null;
+    const playersEl = document.getElementById('mc-players');
+    const versionEl = document.getElementById('mc-version');
+    
+    if (!statusEl || !playersEl || !versionEl) return;
+
+    try {
+        const response = await fetch('https://api.mcsrvstat.us/3/bucket.pikamc.vn:25172');
+        const data = await response.json();
+
+        if (data.online) {
+            statusEl.className = 'status-indicator online';
+            if (statusTextEl) {
+                statusTextEl.setAttribute('data-vi', 'Online');
+                statusTextEl.setAttribute('data-en', 'Online');
+                statusTextEl.innerText = 'Online';
+            }
+            
+            const onlinePlayers = data.players ? data.players.online : 0;
+            const maxPlayers = data.players ? data.players.max : 0;
+            playersEl.innerText = `${onlinePlayers}/${maxPlayers}`;
+            
+            versionEl.innerText = data.version || 'Unknown';
+        } else {
+            setMinecraftOffline(statusEl, statusTextEl, playersEl, versionEl);
+        }
+    } catch (error) {
+        console.error('Failed to fetch Minecraft stats:', error);
+        setMinecraftOffline(statusEl, statusTextEl, playersEl, versionEl);
+    }
+}
+
+function setMinecraftOffline(statusEl, statusTextEl, playersEl, versionEl) {
+    statusEl.className = 'status-indicator offline';
+    if (statusTextEl) {
+        statusTextEl.setAttribute('data-vi', 'Offline');
+        statusTextEl.setAttribute('data-en', 'Offline');
+        statusTextEl.innerText = 'Offline';
+    }
+    playersEl.innerText = '--/--';
+    versionEl.innerText = '--';
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     connectLanyard();
     initViewCounter();
     initMusicPlayer();
+    
+    // Minecraft Stats Fetching
+    fetchMinecraftStats();
+    setInterval(fetchMinecraftStats, 60000);
 
     // Toggle Status Bubble by clicking Avatar
     const avatarContainer = document.querySelector('.discord-avatar-container');

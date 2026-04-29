@@ -116,6 +116,7 @@
                     <a href="#about" class="nav-link active" data-vi="<i class='fas fa-user-astronaut'></i> Về Tôi" data-en="<i class='fas fa-user-astronaut'></i> About Me"><i class="fas fa-user-astronaut"></i> Về Tôi</a>
                     <a href="#services" class="nav-link" data-vi="<i class='fas fa-briefcase'></i> Chuyên Môn" data-en="<i class='fas fa-briefcase'></i> Expertise"><i class="fas fa-briefcase"></i> Chuyên Môn</a>
                     <a href="#skills" class="nav-link" data-vi="<i class='fas fa-layer-group'></i> Kỹ Năng / Công Nghệ" data-en="<i class='fas fa-layer-group'></i> Skills / Tech"><i class="fas fa-layer-group"></i> Kỹ Năng / Công Nghệ</a>
+                    <a href="#live-stats" class="nav-link" data-vi="<i class='fas fa-chart-line'></i> Thống Kê" data-en="<i class='fas fa-chart-line'></i> Live Stats"><i class="fas fa-chart-line"></i> Thống Kê</a>
                     <a href="#experience" class="nav-link" data-vi="<i class='fas fa-project-diagram'></i> Dự Án Tham Gia" data-en="<i class='fas fa-project-diagram'></i> Projects"><i class="fas fa-project-diagram"></i> Dự Án Tham Gia</a>
                 </nav>
 
@@ -274,10 +275,52 @@
                 </div>
             </section>
 
+            <!-- Live Stats Section -->
+            <section id="live-stats" class="section">
+                <div class="section-header fade-up">
+                    <span class="section-badge">04 // LIVE STATS</span>
+                    <h2 class="section-title" data-vi="Thống Kê Trực Tuyến" data-en="Live Stats">Thống Kê Trực Tuyến</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <!-- Minecraft SMP Status Card -->
+                    <div class="glass-card stat-card fade-up">
+                        <h3 data-vi="<i class='fas fa-server'></i> Minecraft SMP" data-en="<i class='fas fa-server'></i> Minecraft SMP"><i class="fas fa-server"></i> Minecraft SMP</h3>
+                        <div class="mc-server-info">
+                            <div class="mc-stat-row">
+                                <span class="mc-stat-label" data-vi="Trạng thái" data-en="Status">Trạng thái</span>
+                                <span id="mc-status" class="status-indicator offline"><span class="status-dot"></span> <span class="status-text" data-vi="Đang tải..." data-en="Loading...">Đang tải...</span></span>
+                            </div>
+                            <div class="mc-stat-row">
+                                <span class="mc-stat-label" data-vi="Người chơi" data-en="Players">Người chơi</span>
+                                <span id="mc-players" class="mc-stat-value">--/--</span>
+                            </div>
+                            <div class="mc-stat-row">
+                                <span class="mc-stat-label">IP</span>
+                                <span class="mc-stat-value">bucket.pikamc.vn:25172</span>
+                            </div>
+                            <div class="mc-stat-row">
+                                <span class="mc-stat-label" data-vi="Phiên bản" data-en="Version">Phiên bản</span>
+                                <span id="mc-version" class="mc-stat-value">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- osu! Stats Card -->
+                    <div class="glass-card stat-card fade-up delay-1">
+                        <h3 data-vi="<i class='fas fa-gamepad'></i> osu! Thống kê" data-en="<i class='fas fa-gamepad'></i> osu! Stats"><i class="fas fa-gamepad"></i> osu! Thống kê</h3>
+                        <a href="https://osu.ppy.sh/users/Gaming1507" target="_blank" class="osu-sig-container" data-vi-title="Xem hồ sơ osu!" data-en-title="View osu! Profile" title="Xem hồ sơ osu!">
+                            <!-- Using osu-sig generator with custom color (#1A1030 / #4DDDB8) and mode -->
+                            <img src="https://osu-sig.s23.moe/card?user=Gaming1507&mode=osu&color=4DDDB8&bg=1A1030&radius=12" alt="osu! Signature for Gaming1507" class="osu-sig">
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             <!-- Experience / Projects Section -->
             <section id="experience" class="section">
                 <div class="section-header fade-up">
-                    <span class="section-badge">04 // PROJECTS</span>
+                    <span class="section-badge">05 // PROJECTS</span>
                     <h2 class="section-title" data-vi="Dự Án Tham Gia" data-en="Projects">Dự Án Tham Gia</h2>
                 </div>
 
