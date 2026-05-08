@@ -955,7 +955,19 @@ body.ui-hidden .content-wrapper {
     object-fit: cover;
 }
 
-.activity-small-image {
+img.activity-small-image {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-panel);
+    background: #111;
+    object-fit: cover;
+}
+
+div.activity-small-image {
     position: absolute;
     bottom: -4px;
     right: -4px;

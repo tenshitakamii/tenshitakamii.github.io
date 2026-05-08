@@ -409,86 +409,99 @@ function updateDiscordUI(data) {
     }
 }
 
-// Render a single activity item for the list
+// Universal renderer — extracts ALL available data from any activity
 function renderActivityItem(act) {
-    // Spotify (type 2)
-    if (act.type === 2 && act.name === 'Spotify') {
-        const albumArt = act.assets && act.assets.large_image
-            ? act.assets.large_image.replace('spotify:', 'https://i.scdn.co/image/')
-            : '';
-        return `
-            <div class="activity-item">
-                <div class="activity-icon-container">
-                    ${albumArt ? `<img src="${albumArt}" class="activity-large-image" alt="Album Art">` : '<i class="fab fa-spotify" style="font-size:2rem;margin:15px;color:#1DB954;"></i>'}
-                    <div class="activity-small-image" style="background:#1DB954;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;"><i class="fab fa-spotify"></i></div>
-                </div>
-                <div class="activity-details">
-                    <div class="activity-name" style="color:#1DB954;">Listening to Spotify</div>
-                    <div class="activity-state">${act.details || ''}</div>
-                    <div class="activity-details-text">by ${act.state || ''}</div>
-                </div>
-            </div>`;
+    // ---- Resolve images ----
+    let largeImgSrc = '';
+    let smallImgSrc = '';
+    let largeText = '';
+    let smallText = '';
+
+    if (act.assets) {
+        if (act.assets.large_image) {
+            largeImgSrc = resolveDiscordImage(act.assets.large_image, act.application_id);
+        }
+        if (act.assets.small_image) {
+            smallImgSrc = resolveDiscordImage(act.assets.small_image, act.application_id);
+        }
+        largeText = act.assets.large_text || '';
+        smallText = act.assets.small_text || '';
     }
 
-    // Game (type 0)
-    if (act.type === 0) {
-        let iconSrc = '';
-        if (act.assets && act.assets.large_image) {
-            const imgId = act.assets.large_image;
-            iconSrc = imgId.startsWith("mp:external")
-                ? imgId.replace(/mp:external\/.*\/https\//, "https://")
-                : `https://cdn.discordapp.com/app-assets/${act.application_id}/${imgId}.png`;
-        }
-        let timeString = '';
-        if (act.timestamps && act.timestamps.start) {
+    // Spotify override: album art uses spotify: prefix
+    if (act.type === 2 && act.name === 'Spotify' && act.assets && act.assets.large_image) {
+        largeImgSrc = act.assets.large_image.replace('spotify:', 'https://i.scdn.co/image/');
+    }
+
+    // ---- Type-specific styling ----
+    const typeConfig = {
+        0: { label: 'Playing',        icon: 'fas fa-gamepad',         color: 'var(--primary-color)' },
+        1: { label: 'Streaming',      icon: 'fas fa-broadcast-tower', color: '#9146FF' },
+        2: { label: 'Listening to',   icon: 'fas fa-headphones',      color: '#1DB954' },
+        3: { label: 'Watching',       icon: 'fas fa-tv',              color: '#E44D26' },
+        5: { label: 'Competing in',   icon: 'fas fa-trophy',          color: '#FFD700' },
+    };
+    const config = typeConfig[act.type] || { label: '', icon: 'fas fa-circle', color: 'var(--secondary-color)' };
+
+    // Spotify special name
+    const displayLabel = (act.type === 2 && act.name === 'Spotify') ? 'Listening to Spotify' : `${config.label} ${act.name}`;
+
+    // ---- Elapsed time ----
+    let timeString = '';
+    if (act.timestamps) {
+        if (act.timestamps.start) {
             const elapsed = Math.floor((Date.now() - act.timestamps.start) / 60000);
             timeString = elapsed > 0 ? `${elapsed}m elapsed` : 'Just started';
+        } else if (act.timestamps.end) {
+            const remaining = Math.floor((act.timestamps.end - Date.now()) / 60000);
+            if (remaining > 0) timeString = `${remaining}m left`;
         }
-        return `
-            <div class="activity-item">
-                <div class="activity-icon-container">
-                    ${iconSrc ? `<img src="${iconSrc}" class="activity-large-image" alt="Game Icon">` : '<i class="fas fa-gamepad" style="font-size:2rem;margin:15px;color:var(--primary-color);"></i>'}
-                    <div class="activity-small-image" style="background:var(--primary-color);display:flex;align-items:center;justify-content:center;color:#111;font-size:12px;"><i class="fas fa-gamepad"></i></div>
-                </div>
-                <div class="activity-details">
-                    <div class="activity-name">${act.name}</div>
-                    ${act.details ? `<div class="activity-state">${act.details}</div>` : ''}
-                    ${act.state ? `<div class="activity-details-text">${act.state}</div>` : ''}
-                    ${timeString ? `<div class="activity-time">${timeString}</div>` : ''}
-                </div>
-            </div>`;
     }
 
-    // Streaming (type 1)
-    if (act.type === 1) {
-        return `
-            <div class="activity-item">
-                <div class="activity-icon-container">
-                    <i class="fas fa-broadcast-tower" style="font-size:2rem;margin:15px;color:#9146FF;"></i>
-                    <div class="activity-small-image" style="background:#9146FF;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;"><i class="fas fa-video"></i></div>
-                </div>
-                <div class="activity-details">
-                    <div class="activity-name" style="color:#9146FF;">${act.name}</div>
-                    ${act.details ? `<div class="activity-state">${act.details}</div>` : ''}
-                    ${act.state ? `<div class="activity-details-text">${act.state}</div>` : ''}
-                </div>
-            </div>`;
-    }
+    // ---- Build HTML ----
+    const largeImgHTML = largeImgSrc
+        ? `<img src="${largeImgSrc}" class="activity-large-image" alt="${largeText || act.name}" title="${largeText}">`
+        : `<i class="${config.icon}" style="font-size:2rem;margin:15px;color:${config.color};"></i>`;
 
-    // Generic fallback (Watching type 3, Competing type 5, etc.)
-    const typeLabels = { 2: 'Listening to', 3: 'Watching', 5: 'Competing in' };
-    const label = typeLabels[act.type] || '';
+    const smallImgHTML = smallImgSrc
+        ? `<img src="${smallImgSrc}" class="activity-small-image" alt="${smallText}" title="${smallText}">`
+        : `<div class="activity-small-image" style="background:${config.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;"><i class="${config.icon}"></i></div>`;
+
     return `
         <div class="activity-item">
             <div class="activity-icon-container">
-                <i class="fas fa-circle-play" style="font-size:2rem;margin:15px;color:var(--secondary-color);"></i>
+                ${largeImgHTML}
+                ${smallImgHTML}
             </div>
             <div class="activity-details">
-                <div class="activity-name">${label ? label + ' ' : ''}${act.name}</div>
+                <div class="activity-name" style="color:${config.color};">${displayLabel}</div>
                 ${act.details ? `<div class="activity-state">${act.details}</div>` : ''}
                 ${act.state ? `<div class="activity-details-text">${act.state}</div>` : ''}
+                ${timeString ? `<div class="activity-time">${timeString}</div>` : ''}
             </div>
         </div>`;
+}
+
+// Resolve any Discord image ID to a usable URL
+function resolveDiscordImage(imageId, appId) {
+    if (!imageId) return '';
+    // PreMiD / external images
+    if (imageId.startsWith('mp:external')) {
+        return imageId.replace(/mp:external\/.*?\/https\//, 'https://');
+    }
+    // Spotify CDN
+    if (imageId.startsWith('spotify:')) {
+        return imageId.replace('spotify:', 'https://i.scdn.co/image/');
+    }
+    // Twitch CDN
+    if (imageId.startsWith('twitch:')) {
+        return imageId.replace('twitch:', 'https://static-cdn.jtvnw.net/previews-ttv/live_user_');
+    }
+    // Standard Discord app-assets
+    if (appId) {
+        return `https://cdn.discordapp.com/app-assets/${appId}/${imageId}.png`;
+    }
+    return '';
 }
 
 function connectLanyard() {
