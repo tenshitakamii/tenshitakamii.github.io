@@ -386,69 +386,109 @@ function updateDiscordUI(data) {
     }
 
     // =========================================================
-    // UPDATE FULL WIDTH LIVE ACTIVITY CARD (IDEA 1)
+    // UPDATE FULL WIDTH LIVE ACTIVITY CARD — SHOW ALL ACTIVITIES
     // =========================================================
     const liveActivityEl = document.getElementById('discord-live-activity');
     if (liveActivityEl) {
         if (data.discord_status === 'offline') {
-            liveActivityEl.innerHTML = `<div class="activity-placeholder"><i class="fas fa-bed"></i><span data-vi="Đang offline." data-en="Currently offline.">${currentLang === 'vi' ? 'Đang offline.' : 'Currently offline.'}</span></div>`;
+            liveActivityEl.innerHTML = `<div class="activity-placeholder"><i class="fas fa-bed"></i><span>${currentLang === 'vi' ? 'Đang offline.' : 'Currently offline.'}</span></div>`;
         } else {
-            const spotifyAct = acts.find(a => a.type === 2 && a.name === "Spotify");
-            const playAct = acts.find(a => a.type === 0);
-            
-            let cardHTML = '';
-            
-            if (spotifyAct) {
-                const albumArt = spotifyAct.assets && spotifyAct.assets.large_image 
-                    ? spotifyAct.assets.large_image.replace('spotify:', 'https://i.scdn.co/image/') 
-                    : '';
-                cardHTML = `
-                    <div class="activity-icon-container">
-                        ${albumArt ? `<img src="${albumArt}" class="activity-large-image" alt="Album Art">` : '<i class="fab fa-spotify" style="font-size:2rem; margin:15px; color:#1DB954;"></i>'}
-                        <div class="activity-small-image" style="background:#1DB954; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px;"><i class="fab fa-spotify"></i></div>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-name" style="color: #1DB954;">Listening to Spotify</div>
-                        <div class="activity-state">${spotifyAct.details || ''}</div>
-                        <div class="activity-details-text">by ${spotifyAct.state || ''}</div>
-                    </div>
-                `;
-            } else if (playAct) {
-                let imgId = playAct.assets && playAct.assets.large_image ? playAct.assets.large_image : null;
-                let iconSrc = '';
-                if (imgId) {
-                    iconSrc = imgId.startsWith("mp:external")
-                        ? imgId.replace(/mp:external\/.*\/https\//, "https://")
-                        : `https://cdn.discordapp.com/app-assets/${playAct.application_id}/${imgId}.png`;
-                }
-                
-                let timeString = '';
-                if (playAct.timestamps && playAct.timestamps.start) {
-                    const elapsed = Math.floor((Date.now() - playAct.timestamps.start) / 60000);
-                    timeString = elapsed > 0 ? `Elapsed: ${elapsed}m` : 'Just started';
-                }
+            // Filter out type 4 (Custom Status) — it's already shown as a bubble
+            const visibleActs = acts.filter(a => a.type !== 4);
 
-                cardHTML = `
-                    <div class="activity-icon-container">
-                        ${iconSrc ? `<img src="${iconSrc}" class="activity-large-image" alt="Game Icon">` : '<i class="fas fa-gamepad" style="font-size:2rem; margin:15px; color:var(--primary-color);"></i>'}
-                        <div class="activity-small-image" style="background:var(--primary-color); display:flex; align-items:center; justify-content:center; color:#111; font-size:12px;"><i class="fas fa-gamepad"></i></div>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-name">${playAct.name}</div>
-                        ${playAct.details ? `<div class="activity-state">${playAct.details}</div>` : ''}
-                        ${playAct.state ? `<div class="activity-details-text">${playAct.state}</div>` : ''}
-                        ${timeString ? `<div class="activity-time">${timeString}</div>` : ''}
-                    </div>
-                `;
-            }
-
-            if (cardHTML !== '') {
-                liveActivityEl.innerHTML = cardHTML;
+            if (visibleActs.length === 0) {
+                liveActivityEl.innerHTML = `<div class="activity-placeholder"><i class="fas fa-coffee"></i><span>${currentLang === 'vi' ? 'Đang online nhưng không hoạt động gì.' : 'Online, not doing anything.'}</span></div>`;
             } else {
-                liveActivityEl.innerHTML = `<div class="activity-placeholder"><i class="fas fa-coffee"></i><span data-vi="Đang online nhưng không chơi game hay nghe nhạc." data-en="Online, not playing anything.">${currentLang === 'vi' ? 'Đang online nhưng không chơi game hay nghe nhạc.' : 'Online, not playing anything.'}</span></div>`;
+                let listHTML = '';
+                visibleActs.forEach(act => {
+                    listHTML += renderActivityItem(act);
+                });
+                liveActivityEl.innerHTML = `<div class="activity-list">${listHTML}</div>`;
             }
         }
     }
+}
+
+// Render a single activity item for the list
+function renderActivityItem(act) {
+    // Spotify (type 2)
+    if (act.type === 2 && act.name === 'Spotify') {
+        const albumArt = act.assets && act.assets.large_image
+            ? act.assets.large_image.replace('spotify:', 'https://i.scdn.co/image/')
+            : '';
+        return `
+            <div class="activity-item">
+                <div class="activity-icon-container">
+                    ${albumArt ? `<img src="${albumArt}" class="activity-large-image" alt="Album Art">` : '<i class="fab fa-spotify" style="font-size:2rem;margin:15px;color:#1DB954;"></i>'}
+                    <div class="activity-small-image" style="background:#1DB954;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;"><i class="fab fa-spotify"></i></div>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-name" style="color:#1DB954;">Listening to Spotify</div>
+                    <div class="activity-state">${act.details || ''}</div>
+                    <div class="activity-details-text">by ${act.state || ''}</div>
+                </div>
+            </div>`;
+    }
+
+    // Game (type 0)
+    if (act.type === 0) {
+        let iconSrc = '';
+        if (act.assets && act.assets.large_image) {
+            const imgId = act.assets.large_image;
+            iconSrc = imgId.startsWith("mp:external")
+                ? imgId.replace(/mp:external\/.*\/https\//, "https://")
+                : `https://cdn.discordapp.com/app-assets/${act.application_id}/${imgId}.png`;
+        }
+        let timeString = '';
+        if (act.timestamps && act.timestamps.start) {
+            const elapsed = Math.floor((Date.now() - act.timestamps.start) / 60000);
+            timeString = elapsed > 0 ? `${elapsed}m elapsed` : 'Just started';
+        }
+        return `
+            <div class="activity-item">
+                <div class="activity-icon-container">
+                    ${iconSrc ? `<img src="${iconSrc}" class="activity-large-image" alt="Game Icon">` : '<i class="fas fa-gamepad" style="font-size:2rem;margin:15px;color:var(--primary-color);"></i>'}
+                    <div class="activity-small-image" style="background:var(--primary-color);display:flex;align-items:center;justify-content:center;color:#111;font-size:12px;"><i class="fas fa-gamepad"></i></div>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-name">${act.name}</div>
+                    ${act.details ? `<div class="activity-state">${act.details}</div>` : ''}
+                    ${act.state ? `<div class="activity-details-text">${act.state}</div>` : ''}
+                    ${timeString ? `<div class="activity-time">${timeString}</div>` : ''}
+                </div>
+            </div>`;
+    }
+
+    // Streaming (type 1)
+    if (act.type === 1) {
+        return `
+            <div class="activity-item">
+                <div class="activity-icon-container">
+                    <i class="fas fa-broadcast-tower" style="font-size:2rem;margin:15px;color:#9146FF;"></i>
+                    <div class="activity-small-image" style="background:#9146FF;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;"><i class="fas fa-video"></i></div>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-name" style="color:#9146FF;">${act.name}</div>
+                    ${act.details ? `<div class="activity-state">${act.details}</div>` : ''}
+                    ${act.state ? `<div class="activity-details-text">${act.state}</div>` : ''}
+                </div>
+            </div>`;
+    }
+
+    // Generic fallback (Watching type 3, Competing type 5, etc.)
+    const typeLabels = { 2: 'Listening to', 3: 'Watching', 5: 'Competing in' };
+    const label = typeLabels[act.type] || '';
+    return `
+        <div class="activity-item">
+            <div class="activity-icon-container">
+                <i class="fas fa-circle-play" style="font-size:2rem;margin:15px;color:var(--secondary-color);"></i>
+            </div>
+            <div class="activity-details">
+                <div class="activity-name">${label ? label + ' ' : ''}${act.name}</div>
+                ${act.details ? `<div class="activity-state">${act.details}</div>` : ''}
+                ${act.state ? `<div class="activity-details-text">${act.state}</div>` : ''}
+            </div>
+        </div>`;
 }
 
 function connectLanyard() {

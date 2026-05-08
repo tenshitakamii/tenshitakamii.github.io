@@ -907,6 +907,30 @@ body.ui-hidden .content-wrapper {
     padding-top: 0.5rem;
 }
 
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.activity-item:first-child {
+    padding-top: 0;
+}
+
 .activity-placeholder {
     color: var(--text-muted);
     font-size: 0.95rem;
